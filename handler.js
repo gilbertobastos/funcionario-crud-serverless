@@ -4,9 +4,8 @@ const FuncionarioRepository = require("./src/repository/funcionario-repository.j
 const AWS = require("aws-sdk");
 AWS.config.update({ region: "sa-east-1" });
 
-const funcionarioRepository = new FuncionarioRepository(
-  new AWS.DynamoDB.DocumentClient()
-);
+const DynamoDB = new AWS.DynamoDB();
+const funcionarioRepository = new FuncionarioRepository(DynamoDB);
 
 module.exports.getFuncionario = async function (event) {
   try {
