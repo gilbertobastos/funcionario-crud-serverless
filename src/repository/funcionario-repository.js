@@ -24,8 +24,9 @@ class FuncionarioRepository {
   }
 
   async addFuncionario(funcionario) {
-    this._awsDocumentClient.put({
-      Body: JSON.stringify(funcionario)
+    this._awsDocumentClient.putItem({
+      TableName: 'funcionario-crud-funcionario',
+      Item: funcionario
     });
   }
 
