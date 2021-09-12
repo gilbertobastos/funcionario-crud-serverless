@@ -26,6 +26,12 @@ functions:
       - http:
           path: /funcionario/
           method: post
+  deleteFuncionario:
+    handler: handler.deleteFuncionario
+    events:
+      - http:
+          path: /funcionario/{id}
+          method: delete
 
 plugins:
 - serverless-offline
