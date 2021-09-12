@@ -3,7 +3,7 @@ class Funcionario {
     this.idade = idade;
     this.nome = nome;
     this.cargo = cargo;
-    this.id = id;
+    this.id = id || (new Date());
   }
 }
 
