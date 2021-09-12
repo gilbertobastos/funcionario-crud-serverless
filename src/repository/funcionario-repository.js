@@ -4,27 +4,28 @@ class FuncionarioRepository {
   /**
    * @param {AWS.DynamoDB}
    */
-  constructor(awsDocumentClient) {
-    this._awsDocumentClient = awsDocumentClient;
+  constructor(DynamoDB) {
+    this.DynamoDB = DynamoDB;
   }
 
   async getFuncionarios() {
-    return await this._awsDocumentClient.get({
+    return await this.DynamoDB.scan({
       TableName: 'funcionario-crud-funcionario'
-    }).data;
+    });
   }
 
   async getFuncionarioById(id) {
-    return await this._awsDocumentClient.get({
+    return await this.DynamoDB.scan({
       TableName: 'funcionario-crud-funcionario',
       Key: {
         "id": id
       }
-    }).data;
+    });
   }
 
   async addFuncionario(funcionario) {
-    this._awsDocumentClient.putItem({
+    console.log(this.DynamoDB);
+    await this.DynamoDB.putItem({
       TableName: 'funcionario-crud-funcionario',
       Item: funcionario
     });

@@ -4,9 +4,8 @@ const FuncionarioRepository = require("./src/repository/funcionario-repository.j
 const AWS = require("aws-sdk");
 AWS.config.update({ region: "sa-east-1" });
 
-const funcionarioRepository = new FuncionarioRepository(
-  new AWS.DynamoDB.DocumentClient()
-);
+const DynamoDB = new AWS.DynamoDB();
+const funcionarioRepository = new FuncionarioRepository(DynamoDB);
 
 module.exports.getFuncionario = async function (event) {
   try {
@@ -73,20 +72,3 @@ module.exports.addFuncionario = async function (event) {
     };
   }
 };
-
-// module.exports.hello = async (event) => {
-//   return {
-//     statusCode: 200,
-//     body: JSON.stringify(
-//       {
-//         message: 'Go Serverless v1.0! Your function executed successfully!',
-//         input: event,
-//       },
-//       null,
-//       2
-//     ),
-//   };
-
-//   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-//   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-// };
