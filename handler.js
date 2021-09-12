@@ -9,10 +9,11 @@ const funcionarioRepository = new FuncionarioRepository(DynamoDB);
 
 module.exports.getFuncionario = async function (event) {
   try {
-    const id = parseInt(event.pathParameters.id);
-    if (isNaN(id) || typeof id !== "number") {
+    const id = event.pathParameters.id;
+    if (typeof id !== "string") {
       throw new Error("Invalid id!");
     }
+    
     const functionario = await funcionarioRepository.getFuncionarioById(id);
 
     return {
@@ -29,8 +30,29 @@ module.exports.getFuncionario = async function (event) {
   }
 };
 
+module.exports.deleteFuncionario = async function (event) {
+  try {
+    const id = event.pathParameters.id;
+    if (typeof id !== "string") {
+      throw new Error("Invalid id!");
+    }
+
+    await funcionarioRepository.deleteFuncionario(id);
+    return {
+      statusCode: 200,
+    };
+  } catch (err) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: err.message,
+      }),
+    };
+  }
+};
+
 module.exports.getAllFuncionarios = async function (event) {
-  try {  
+  try {
     return {
       statusCode: 200,
       body: JSON.stringify(funcionarioRepository.getFuncionarios()),
@@ -47,18 +69,20 @@ module.exports.getAllFuncionarios = async function (event) {
 
 module.exports.addFuncionario = async function (event) {
   try {
+    const body = JSON.parse(event.body);
+
     if (
-      !typeof event.body.idade === "number" ||
-      !typeof event.body.nome === "string" ||
-      !typeof event.body.cargo === "string"
+      !typeof body.idade === "number" ||
+      !typeof body.nome === "string" ||
+      !typeof body.cargo === "string"
     ) {
       throw new Error("Invalid values for creating the item.");
     }
 
     const funcionario = new Funcionario(
-      event.body.idade,
-      event.body.nome,
-      event.body.cargo
+      body.idade,
+      body.nome,
+      body.cargo
     );
 
     funcionarioRepository.addFuncionario(funcionario);
